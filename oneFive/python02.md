@@ -112,4 +112,66 @@ False
 #凡是可作用于for循环的对象都是Iterable类型；
 #凡是可作用于next()函数的对象都是Iterator类型，它们表示一个惰性计算的序列；
 #集合数据类型如list、dict、str等是Iterable但不是Iterator，不过可以通过iter()函数获得一个Iterator对象。
+
+
+# Iterable ->for 可迭代
+# Iterator ->for 可迭代并且 next() 可以获取下一个值
+```
+
+
+### 函数式编程
+#### 高阶函数
+```
+def add(x, y, f):
+    return f(x) + f(y) 
+# 当我们调用add(-5, 6, abs)时，参数x，y和f分别接收-5，6和abs，根据函数定义，我们可以推导计算过程为：
+x = -5
+y = 6
+f = abs
+f(x) + f(y) ==> abs(-5) + abs(6) ==> 11
+return 11
+```
+
+#### map/reduce
+```
+map
+>>> def f(x):
+...     return x * x
+...
+>>> r = map(f, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+>>> list(r)
+[1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+# reduce
+>>> from functools import reduce
+>>> def fn(x, y):
+...     return x * 10 + y
+...
+>>> reduce(fn, [1, 3, 5, 7, 9])
+13579
+
+# map接受一个参数  reduce 接受两个参数
+```
+#### filter
+```
+# 和map()类似，filter()也接收一个函数和一个序列。和map()不同的是，filter()把传入的函数依次作用于每个元素，然后根据返回值是True还是False决定保留还是丢弃该元素。
+def is_odd(n):
+    return n % 2 == 1
+
+list(filter(is_odd, [1, 2, 4, 5, 6, 9, 10, 15]))
+# 结果: [1, 5, 9, 15]
+```
+
+#### sorted
+```
+>>> sorted([36, 5, -12, 9, -21])
+[-21, -12, 5, 9, 36]
+# sorted()函数也是一个高阶函数，它还可以接收一个key函数来实现自定义的排序
+# 按绝对值大小排序
+>>> sorted([36, 5, -12, 9, -21], key=abs)
+[5, 9, -12, -21, 36]
+
+# 对字符排序默认为ASCII的大小比较的，使用下面的key可以忽略大小写进行排序
+>>> sorted(['bob', 'about', 'Zoo', 'Credit'], key=str.lower)
+['about', 'bob', 'Credit', 'Zoo']
 ```
