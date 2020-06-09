@@ -175,3 +175,75 @@ list(filter(is_odd, [1, 2, 4, 5, 6, 9, 10, 15]))
 >>> sorted(['bob', 'about', 'Zoo', 'Credit'], key=str.lower)
 ['about', 'bob', 'Credit', 'Zoo']
 ```
+
+#### 返回函数  闭包
+```
+def lazy_sum(*args):
+    def sum():
+        ax = 0
+        for n in args:
+            ax = ax + n
+        return ax
+    return sum
+
+# 调用lazy_sum()时，返回的并不是求和结果，而是求和函数：
+>>> f = lazy_sum(1, 3, 5, 7, 9)
+>>> f
+# 调用函数f时，才真正计算求和的结果：
+>>> f()
+25
+```
+#### 匿名函数 lambda表达式
+```
+#  匿名函数lambda x: x * x实际上就是：冒号前面的x表示函数参数
+def f(x):
+    return x * x
+```
+
+#### 装饰器 （目前理解为注解）
+函数也是一个对象，而且函数对象可以被赋值给变量  
+函数对象有一个__name__属性，可以拿到函数的名字，固定属性 
+```
+def fun():
+    pass
+
+fun.__name__ = 'fun'
+```
+在代码运行期间动态增加功能的方式，称之为“装饰器”（Decorator）  
+```
+# decorator就是一个返回函数的高阶函数。所以，我们要定义一个能打印日志的decorator，可以定义如下：
+def log(func):
+    def wrapper(*args, **kw):
+        print('call %s():' % func.__name__)
+        return func(*args, **kw)
+    return wrapper
+
+@log
+def now():
+    print('2015-3-25')
+
+# 调用now
+>>> now()
+call now():
+2015-3-25
+```
+
+#### 偏函数
+```
+# functools.partial就是帮助我们创建一个偏函数的，不需要我们自己定义int2()，可以直接使用下面的代码创建一个新的函数int2：
+>>> import functools
+>>> int2 = functools.partial(int, base=2)
+>>> int2('1000000')
+64
+>>> int2('1010101')
+85
+# 总结functools.partial的作用就是，把一个函数的某些参数给固定住（也就是设置默认值），返回一个新的函数，调用这个新函数会更简单。
+max2 = functools.partial(max, 10)
+实际上会把10作为*args的一部分自动加到左边，也就是：
+max2(5, 6, 7)
+相当于：
+args = (10, 5, 6, 7)
+max(*args)
+结果为10。
+
+```
