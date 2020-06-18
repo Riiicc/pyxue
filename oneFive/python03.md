@@ -102,3 +102,74 @@ class Student(object):
     def age(self):
         return 2015 - self._birth
 ```
+#### \_\_str__定制类（toString）
+```
+>>> class Student(object):
+...     def __init__(self, name):
+...         self.name = name
+...     def __str__(self):
+...         return 'Student object (name: %s)' % self.name
+...
+>>> print(Student('Michael'))
+Student object (name: Michael)
+```
+##### \_\_iter__ 于for ... in循环
+```
+class Fib(object):
+    def __init__(self):
+        self.a, self.b = 0, 1 # 初始化两个计数器a，b
+
+    def __iter__(self):
+        return self # 实例本身就是迭代对象，故返回自己
+
+    def __next__(self):
+        self.a, self.b = self.b, self.a + self.b # 计算下一个值
+        if self.a > 100000: # 退出循环的条件
+            raise StopIteration()
+        return self.a # 返回下一个值
+```
+##### \_\_getitem__ 根据索引获取
+```
+class Fib(object):
+    def __getitem__(self, n):
+        a, b = 1, 1
+        for x in range(n):
+            a, b = b, a + b
+        return a
+
+>>> f = Fib()
+>>> f[0]
+1
+```
+
+#### \_\_getattr__
+```
+class Student(object):
+
+    def __init__(self):
+        self.name = 'Michael'
+
+    def __getattr__(self, attr):
+        if attr=='score':
+            return 99
+# 当调用不存在的属性时，比如score，Python解释器会试图调用__getattr__(self, 'score')来尝试获得属性
+>>> s = Student()
+>>> s.name
+'Michael'
+>>> s.score
+99
+```
+#### \_\_call__
+```
+class Student(object):
+    def __init__(self, name):
+        self.name = name
+
+    def __call__(self):
+        print('My name is %s.' % self.name)
+
+# 实例调用
+>>> s = Student('Michael')
+>>> s() # self参数不要传入
+My name is Michael.
+```
