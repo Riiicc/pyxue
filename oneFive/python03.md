@@ -102,7 +102,8 @@ class Student(object):
     def age(self):
         return 2015 - self._birth
 ```
-#### \_\_str__定制类（toString）
+### 定制类
+#### \_\_str__（toString）
 ```
 >>> class Student(object):
 ...     def __init__(self, name):
